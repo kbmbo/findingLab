@@ -1,0 +1,50 @@
+@charset "UTF-8";
+@font-face {
+  font-family: 'notokr';
+  src: url('../../font/notokr-light.eot');
+  src: url('../../font/notokr-light.woff2') format('woff2'),
+  url('../../font/notokr-light.woff') format('woff');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'notokr';
+  src: url('../../font/notokr-regular.eot');
+  src: url('../../font/notokr-regular.woff2') format('woff2'),
+  url('../../font/notokr-regular.woff') format('woff');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'notokr';
+  src: url('../../font/notokr-medium.eot');
+  src: url('../../font/notokr-medium.woff2') format('woff2'),
+  url('../../font/notokr-medium.woff') format('woff');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'notokr';
+  src: url('../../font/notokr-bold.eot');
+  src: url('../../font/notokr-bold.woff2') format('woff2'),
+  url('../../font/notokr-bold.woff') format('woff');
+  font-weight: 600;
+}
+
+/* CSS 초기화 */
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: 0;
+  vertical-align: baseline;
+  background: transparent;
+  font-weight: 400;
+}
+html {width: 100%; font-family: 'notokr',Dotum,'돋움',Helvetica,"Apple SD Gothic Neo",'sans-serif';font-size: 10px; scroll-behavior: smooth;word-break:keep-all; overflow-x: hidden; overflow-y: scroll}
+body {width: 100%; background-color: #fff; font-size: 1.8rem; color: $txtColor; scroll-behavior: smooth;}
+li {list-style: none;}
+button {background-color: transparent; cursor: pointer;font-family: 'DidactGothic','notokr',Dotum,'돋움',Helvetica,"Apple SD Gothic Neo",'sans-serif';font-size: 10px; color: $mainColor;}
+aside, details, figcaption, figure, footer, header, hgroup, menu, nav{display: block;}
+a {text-decoration: none; color: $mainColor;}
+h2 {font-size: 4rem;}
+h3 {font-size: 3rem;}

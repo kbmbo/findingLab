@@ -1,0 +1,54 @@
+
+@mixin WH($w,$h){
+	width: $w;
+	height: $h;    
+}
+@mixin position($p: null,$t: null,$b: null,$l: null,$r: null) {
+  position: $p;
+  top: $t;
+  bottom: $b;
+  left: $l;
+  right: $r;
+}
+@mixin bgImg($size) {
+    background: {
+        repeat: no-repeat;
+        size: $size;
+        position:center;
+    }
+}
+@mixin transition{
+	transition: all .3s;
+}
+@mixin ani {
+	opacity: 1;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+$breakpoints :(
+	'tablet':(max-width: 1024px),
+	'small-tablet':(max-width: 820px),
+	'max-mob':(max-width: 428px),
+	'mob':(max-width: 360px),
+	'small-mob':(max-width: 320px),
+);
+@mixin screen($name){
+	@if map-has-key($breakpoints, $name) {
+		@media only screen and #{inspect(map-get($breakpoints, $name))} { @content; } 
+	} 
+	@else { @warn "Unfortunately, no value could be retrieved from `#{$breakpoints}`. Please make sure it is defined in `$breakpoints` map."; }
+}
+
+$mainColor:#f55a5a;
+$txtColor:#292929;
+$gray:#ccc;
+$subNavC:rgba(255,255,255,.8);
+$navH:7.5rem;
+$conP: 15.365vw;
+$fullPageBasis: 40%;
+$serviceBasis: 20%;
+$aboutBasis: 38%;
+$mobMenuListH: 7rem;
+$floatingBtnSize: 7rem;
+$clientListRight: 6.25vw;

@@ -1,0 +1,928 @@
+@charset "UTF-8";
+/////////// 커스텀 스크롤:s ///////////
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px rgba(95, 78, 78, 0.1);
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+	border-radius: 1rem;
+	background-color: #f5f5f5;
+}
+::-webkit-scrollbar {
+	@include WH(1rem,1rem);
+	background-color: #f5f5f5;
+	margin-left: .5rem;
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 1rem;
+	background-color: rgba(85, 85, 85, 0.15);
+}
+/////////// 커스텀 스크롤:e ///////////
+
+.logo {
+	@include bgImg(contain);
+	background-position: left;
+	font-size: 0;
+	width: 14.5rem;
+	aspect-ratio: 3.26;
+}
+.floating-btn {
+	@include position($p:fixed,$b:0);
+	background-color: rgba(255, 255, 255, .5);
+	width: 100%;
+	padding: 1.5rem $conP;
+	> p {display: none;}
+	.mob-btn-container {
+		display: flex;
+		flex-basis: 100%;
+		justify-content: space-between;
+		align-items: center;
+		> div {
+			display: flex;
+			button {
+				padding: 0 3rem;
+				border-radius: 4rem;
+				font-size: 1.4rem;
+				height: 5rem;
+				display: flex;
+				align-items: center;
+				> i {
+					@include WH(1rem,2rem);
+					position: relative;
+					margin-left: 1.5rem;
+					display: inline-block;
+					&:before, &:after {
+						@include position($p:absolute,$r:37%);
+						content: '';
+						display: block;
+						width: 90%;
+						height: 1px;
+					}
+					&:before {
+						transform: rotate(45deg);
+						top: 47%;
+						margin-top: -27.5%;
+					}
+					&:after {
+						transform: rotate(315deg);
+						bottom: 47%;
+						margin-bottom: -27.5%;
+					}
+				}
+
+			}
+			&.app button{
+				background-color: $mainColor;
+				color: #fff;
+				margin-right: 2rem;
+				> i:before, > i:after {background-color: #fff;}
+			}
+			&.download button{
+				background-color: #fff;
+				border: 1px solid $mainColor;
+				margin-left: 2rem;
+				> i:before, > i:after {background-color: $mainColor;}
+				> span {
+					@include WH(2rem,2rem);
+					margin-left: .7rem;
+					background-image: url("../../img/finding-lab/svg/icon_play.svg");
+					background-repeat: no-repeat;
+					background-position: center;
+					background-size: contain;
+				}
+			}
+		}
+	}
+	&.mob-floating-btn {
+		@include WH($floatingBtnSize,$floatingBtnSize);
+		bottom: 1.5rem;
+		right: 1.5rem;
+		padding: 0;
+		border-radius: 50%;
+		background-color: $mainColor;
+		color: #fff;
+		cursor: pointer;
+		> p {
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			span {
+				@include transition;
+				position: absolute;
+				background-color: #fff;
+				&:first-child {
+					@include WH(55%,.3rem);
+				}
+				&:last-child {
+					@include WH(.3rem,55%);
+				}
+			}
+		}
+		&.active > p span{
+			&:first-child {
+				transform: rotate(230deg);
+			}
+			&:last-child {
+				transform: rotate(45deg);
+			}
+		}
+		.mob-btn-container {
+			@include position($p:absolute,$b:$floatingBtnSize+1,$r:0);
+			flex-direction: column-reverse;
+			align-items: flex-end;
+			-webkit-animation-duration: 1.5s;
+			animation-duration: 1.5s;
+			-webkit-animation-fill-mode: both;
+			animation-fill-mode: both;
+			opacity: 0;
+			> div {
+				flex-direction: column;
+				button {
+					justify-content: center;
+					margin: 0 0 1rem !important;
+					> i { display: none !important; }
+				}
+			}
+		}
+	}
+}
+
+.dim {
+	@include WH(100%,100%);
+	@include position($p:fixed,$t:0);
+	display: none;
+	z-index: 9;
+	overflow:hidden;
+	-webkit-overflow-scrolling:touch;
+	&.dimOn {
+		background-color:rgba(0,0,0,.4);
+		display: block;
+	}
+}
+.d-none { display: none !important; }
+/////////// header:s ///////////
+header {
+	@include position($p:fixed,$t:0,$l:0);
+	@include WH(100%,$navH);
+	@include transition;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: #fff;
+	z-index: 998;
+	padding: 0 $conP;
+	overflow:hidden;
+	-webkit-overflow-scrolling:touch;
+	.logo {
+		background-image: url('https://static.trycatch.co.kr/assets/img/logo/logo_w.svg');
+		cursor: pointer;
+		z-index: 999;
+	}
+	.menu {
+		height: 100%;
+		.menu-list {
+			height: 100%;
+			ul {
+				height: 100%;
+				display: flex;
+				align-items: center;
+				li {
+					height: 100%;
+					cursor: pointer;
+					margin-left: 8rem;
+					display: flex;
+					align-items: center;
+					&:first-child { margin-left: 0; }
+				}
+			}
+		}
+		button.m-nav { display: none; }
+	}
+	> button {
+		color: #fff;
+		border: 1px solid #fff;
+		border-radius: .5rem;
+		font-size: 1.4rem;
+		padding: 0 1.8rem;
+		height: 3.5rem;
+	}
+	&.subNav {
+		background-color: #fff;
+		color: $txtColor;
+		box-shadow: 0 .7rem 10px rgba(0,0,0,.04);
+		.logo { background-image: url('https://static.trycatch.co.kr/assets/img/logo/logo.svg'); }
+		.menu-list li.active {
+			color: $mainColor;
+			border-bottom: 2px solid $mainColor;
+			padding-top: 2px
+		}
+		> button {
+			border-color: $mainColor;
+			background-color: $mainColor;
+		}
+	}
+}
+/////////// header:e ///////////
+/////////// section:s ///////////
+.container > article {
+	width: 100%;
+	position: relative;
+	&#fullPage {
+		@include bgImg(cover);
+		padding: 0 $conP 0;
+		background-image: url('../../img/finding-lab/bg/main_bg.webp');
+		color: #fff;
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		text-transform: uppercase;
+		.content {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			flex-basis: $fullPageBasis;
+			height: 100%;
+			> h2 { font-size: 5rem }
+			> span {
+				width: 6rem;
+				border-top: 2px solid $mainColor;
+				margin: 2.8vh 0;
+				display: block;
+			}
+			> p { font-size: 2rem; line-height: 2.8rem }
+		}
+		.mob {
+			@include bgImg(contain);
+			flex-basis: calc( 100% - $fullPageBasis );
+			background-image: url('../../img/finding-lab/bg/main_mob.webp');
+			background-position: bottom;
+			aspect-ratio: 1.043;
+		}
+	}
+
+	&#scrollPage {
+		section {
+			@include transition;
+			position: relative;
+			padding-top: $navH;
+			.content {
+				padding: 0 $conP;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				.mainColor {
+					&-txt {
+						color: $mainColor;
+						font-weight: 600;
+					}
+					&-box {
+						display: flex;
+						> li {
+							border-radius: 30px;
+							cursor: default;
+							> i {
+								@include bgImg(contain);
+								display: block;
+							}
+							@media (hover: hover) {
+								&:hover, &.hover {
+									box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.16);
+									background-color: $mainColor;
+									color: #fff;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			&.vision {
+				background-size: 70vh;
+				background-repeat: no-repeat;
+				background-position: right bottom;
+				background-image: url('../../img/finding-lab/bg/vision.webp');
+				.content {
+					justify-content: center;
+					> ul {
+						margin-top: 4.8rem;
+						> li {
+							@include transition;
+							height: 45rem;
+							padding: 5rem;
+							margin-right: 5rem;
+							> i {
+								@include bgImg(cover);
+								width: 10rem;
+								aspect-ratio: 1;
+								display: block;
+								background-image: url('../../img/finding-lab/svg/icon_vision_02_off.svg');
+							}
+							> h3 { margin: 3rem 0 4rem }
+							> div.txt {line-height: 3rem;}
+							@media (hover: hover) {
+								&:hover {
+									-webkit-transform: translate3d(-.8rem, -.8rem, 0);
+									transform: translate3d(-.8rem, -.8rem, 0);
+									> i {
+										background-image: url('../../img/finding-lab/svg/icon_vision_02_on.svg');
+									}
+									&:first-child {
+										> i{
+											background-image: url('../../img/finding-lab/svg/icon_vision_01_on.svg');
+										}
+									}
+									&:last-child {
+										> i {
+											background-image: url('../../img/finding-lab/svg/icon_vision_03_on.svg');
+										}
+									}
+								}
+							}
+
+							&:first-child {
+								> i{
+									background-image: url('../../img/finding-lab/svg/icon_vision_01_off.svg');
+								}
+							}
+							&:last-child {
+								> i {
+									background-image: url('../../img/finding-lab/svg/icon_vision_03_off.svg');
+								}
+								margin-right: 0;
+							}
+						}
+					}
+				}
+			}
+			&.service {
+				background-size: 43.2vw;
+				background-repeat: no-repeat;
+				background-position: right bottom;
+				background-color: #f5f5f5;
+				.content {
+					justify-content: center;
+					> ul {
+						margin-top: 4rem;
+						flex-direction: column;
+						> li {
+							@include transition;
+							width: 45.2vw;
+							padding: 4rem 5.5rem;
+							margin-bottom: 2rem;
+							display: flex;
+							> i {
+								width: 8rem;
+								aspect-ratio: 1;
+								background-image: url('../../img/finding-lab/svg/icon_service_02_off.svg');
+								margin-right: 4.5rem;
+							}
+							> div > h3 { margin-bottom: 1rem }
+							@media (hover: hover) {
+								&:hover, &.hover {
+									margin-left: 10px;
+									> i {
+										background-image: url('../../img/finding-lab/svg/icon_service_02_on.svg');
+									}
+									&:first-child {
+										> i{
+											background-image: url('../../img/finding-lab/svg/icon_service_01_on.svg');
+										}
+									}
+									&:last-child {
+										> i {
+											background-image: url('../../img/finding-lab/svg/icon_service_03_on.svg');
+										}
+									}
+								}
+							}
+							&:first-child {
+								> i{
+									background-image: url('../../img/finding-lab/svg/icon_service_01_off.svg');
+								}
+							}
+							&:last-child {
+								> i {
+									background-image: url('../../img/finding-lab/svg/icon_service_03_off.svg');
+								}
+								margin-bottom: 0;
+							}
+						}
+					}
+				}
+			}
+			&.client {
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+				h2 > p {
+					display: inline-block;
+					&:first-child {
+						padding-right: 1.5rem;
+					}
+				}
+				.content {
+					height: auto;
+					.client-list {
+						margin: 8rem 0 5.6rem;
+						display: flex;
+						flex-wrap: wrap;
+						justify-content: space-between;
+						> li {
+							@include transition;
+							@include WH(calc((100% - ($clientListRight*4)) / 5),8rem);
+							margin: 0 $clientListRight 3rem 0;
+							font-size: 0;
+							border-radius: 1rem;
+							overflow: hidden;
+							box-shadow: none;
+							padding: .5rem 1.2rem;
+							&:hover {
+								box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.16);
+							}
+							&:nth-child(5n) {
+								margin-right: 0;
+							}
+							& > p {
+								@include bgImg(contain);
+								@include WH(100%,100%);
+							}
+						}
+					}
+				}
+				> div.bottom-bg {
+					@include WH(100%,30vh);
+					@include bgImg(cover);
+					background-image: url('../../img/finding-lab/bg/client.webp');
+					padding: 2.5rem 0;
+					.client-sub-list {
+						@include WH(200%,100%);
+						font-size: 1.5rem;
+						color: rgba(255,255,255,.6);
+						display: flex;
+						flex-wrap: wrap;
+						align-items: center;
+						justify-content: space-evenly;
+						li {
+							height: calc(100%/5);
+							padding: 0 5rem;
+							display: flex;
+							align-items: center;
+							cursor: default;
+						}
+					}
+				}
+			}
+			&.about > .content {
+				flex-direction: row;
+				justify-content: center;
+				> div, .about-img {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+				}
+				> div {
+					flex-basis: $aboutBasis;
+				}
+				.about-img {
+					flex-basis: calc(90% - $aboutBasis);
+					> li {
+						background-size: 58%;
+						background-repeat: no-repeat;
+						font-size: 0;
+						aspect-ratio: 2.55;
+						&:nth-child(odd) {
+							background-position: right;
+						}
+						&:nth-child(even) {
+							background-position: left;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/////////// section:e ///////////
+/////////// footer:s ///////////
+footer {
+	width: 100%;
+	border-top: 1px solid #e6e6e6;
+	padding: 5rem $conP;
+	display: flex;
+	justify-content: space-between;
+	font-size: 1.3rem;
+	.logo {
+		margin-right: 6rem;
+		background-image: url('https://static.trycatch.co.kr/assets/img/logo/logo_g.svg');
+	}
+	> div {
+		display: flex;
+		> div {
+			> div {
+				display: flex;
+				> p:first-child:after {
+					content: '';
+					height: 1rem;
+					display: inline-block;
+					border-left: solid 1px #707070;
+					margin: 0 1.5rem;
+				}
+			}
+			p {
+				margin-bottom : 1rem;
+				&.gray {
+					color: $gray;
+					font-size: 1.2rem;
+					margin: 2.5rem 0 0;
+				}
+			}
+		}
+	}
+	.mob {
+		> .logo {display: none}
+		> ul {
+			display: flex;
+			align-items: center;
+			> li {
+				@include bgImg(cover);
+				@include transition;
+				width: 4rem;
+				aspect-ratio: 1;
+				border-radius: 50%;
+				margin-left: 1rem;
+				font-size: 0;
+				cursor: pointer;
+				&:first-child {
+					background-image: url('../../../assets/img/finding-lab/svg/btn_Facebook_off.svg');
+					margin-left: 0;
+				}
+				&:nth-child(2) {
+					background-image: url('../../../assets/img/finding-lab/svg/btn_naver_off.svg');
+				}
+				&:nth-child(3) {
+					background-image: url('../../../assets/img/finding-lab/svg/btn_Instagram_off.svg');
+				}
+				&:last-child {
+					background-size: 78%;
+					background-image: url('../../../assets/img/finding-lab/svg/btn_linkedin_off.svg');
+				}
+				@media (hover: hover) {
+					&:hover {
+						background-color: #ffecec;
+						&:first-child {
+							background-image: url('../../../assets/img/finding-lab/svg/btn_Facebook_on.svg');
+						}
+						&:nth-child(2) {
+							background-image: url('../../../assets/img/finding-lab/svg/btn_naver_on.svg');
+						}
+						&:nth-child(3) {
+							background-image: url('../../../assets/img/finding-lab/svg/btn_Instagram_on.svg');
+						}
+						&:last-child {
+							background-image: url('../../../assets/img/finding-lab/svg/btn_linkedin_on.svg');
+						}
+					}
+				}
+			}
+		}
+	}
+}
+/////////// footer:e ///////////
+
+/////////// Media queries ////////////////////////////////////////
+@include screen('small-tablet') {
+	$navH:6rem;
+	$conP:5vw;
+	$floatingBtnSize: 5.5rem;
+	.logo {
+		width: 16vw;
+	}
+	h2 {
+		font-size: 5.5vw;
+		text-align: center;
+		justify-content: center
+	}
+	h3 {font-size: 4.5vw; text-align: center;}
+	.mob-flex-column {
+		display: flex;
+		flex-direction:column;
+	}
+	.floating-btn.mob-floating-btn {
+		@include WH($floatingBtnSize,$floatingBtnSize);
+		.mob-btn-container {
+			bottom: $floatingBtnSize+1;
+			> div button {
+				height: 4rem;
+				font-size: 1.3rem;
+				padding: 0 2.5rem;
+			}
+		}
+	}
+
+	/////////// small-tablet header:s ///////////
+	header {
+		height: $navH;
+		padding: 0 $conP;
+		.menu {
+			display: flex;
+			flex-direction:column;
+			justify-content:center;
+			button.m-nav {
+				@include WH(3rem,3rem);
+				position: relative;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-around;
+				p {
+					@include WH(100%,.3rem);
+					@include transition;
+					border-radius: 2px;
+					background-color: #fff;
+					&:last-child { margin-bottom: 0; }
+				}
+				&.on p {
+					background-color: $mainColor;
+					position: absolute;
+					&:first-child {
+						transform: rotate(-45deg);
+					}
+					&:nth-child(2) {display: none;}
+					&:last-child {
+						transform: rotate(45deg);
+					}
+				}
+			}
+			.menu-list {
+				@include position($p:fixed,$t:$navH,$l:0);
+				@include transition;
+				width: 100%;
+				height: 0;
+				overflow:hidden;
+				-webkit-overflow-scrolling:touch;
+				&.down {
+					height: $mobMenuListH*4;
+					ul { opacity: 1 }
+				}
+				ul {
+					opacity: 0;
+					width: 100%;
+					flex-direction:column;
+					font-size: 1.7rem;
+					background-color: $subNavC;
+					li {
+						height: $mobMenuListH;
+						padding: 0 2rem!important;
+						margin-left: 0;
+						justify-content: center;
+					}
+				}
+			}
+
+		}
+		&.subNav {
+			box-shadow: none;
+			border-bottom: 1px solid $gray;
+			.menu button.m-nav p { background-color: $mainColor;}
+		}
+		> button {
+			display: none;
+		}
+	}
+	/////////// small-tablet header:e ///////////
+
+	/////////// small-tablet section:e ///////////
+	.container > article {
+		overflow: hidden;
+		&#fullPage {
+			padding: $navH 0 0;
+			flex-direction: column;
+			align-items: center;
+			.content {
+				align-items: center;
+				> h2 { font-size: 6.5vw }
+				> p {
+					font-size: 3.2vw;
+					line-height: 4.6vw;
+				}
+			}
+			.mob {
+				margin-left: -14vw;
+			}
+		}
+		&#scrollPage {
+			section {
+				padding-top: $navH;
+				.content {
+					padding: 5rem $conP 7rem;
+					h2 {
+						margin: 0 0 7rem;
+					}
+				}
+				&.vision .content {
+					> ul {
+						flex-direction: column;
+						align-items: center;
+						margin-top: 0;
+						> li {
+							padding: 0;
+							margin: 0 0 7rem 0;
+							align-items: center;
+							height: fit-content;
+							> i { width: 20vw }
+							> h3 { margin: 1rem 0 2rem; }
+							> div.txt {
+								text-align: center;
+
+							}
+						}
+					}
+				}
+				&.service {
+					background-image: none;
+					.content > ul {
+						margin: 0;
+						> li {
+							width: 100%;
+							padding: 0;
+							align-items: center;
+							margin-bottom: 7rem;
+							&:last-child { margin-bottom: 5rem; }
+							> i {
+								flex-basis: $serviceBasis;
+								margin-right: 7%;
+							}
+							> div {
+								flex-basis: calc(100% - $serviceBasis);
+								> h3 {
+									text-align: left;
+								}
+							}
+						}
+					}
+				}
+				&.client {
+					h2 > p {
+						display: block;
+						&:first-child {
+							padding-right: 0;
+						}
+					}
+					.content .client-list {
+						margin: 0;
+					}
+					> div.bottom-bg {
+						height: 10vh;
+						> .client-sub-list { display: none }
+					}
+				}
+				&.about > .content {
+					flex-direction: column;
+					> div {
+						flex-basis: 100%;
+						position: unset;
+						height: fit-content;
+						> h2 {
+							margin: 2rem 0 6rem;
+							> p {
+								display: inline-block;
+								&:first-child {
+									padding-right: .2rem;
+								}
+							}
+						}
+					}
+					.about-img { flex-basis: 100%; padding-bottom: 0; }
+				}
+			}
+		}
+	}
+	/////////// small-tablet section:e ///////////
+
+	/////////// small-tablet footer:s ///////////
+	footer {
+		padding: 2rem $conP;
+		flex-direction: column-reverse;
+		> div {
+			flex-direction: column;
+			> .logo {display: none}
+		}
+		.mob {
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 2.5rem;
+			> .logo {
+				display: block;
+				margin-right: 0;
+			}
+			> ul {
+				display: flex;
+				align-items: flex-start;
+			}
+		}
+	}
+	/////////// small-tablet footer:e ///////////
+}
+@include screen('max-mob') {
+	$clientListRight: 10vw;
+	$conP: 10vw;
+	$fullPageBasis: 35%;
+	$mobMenuListH: 5rem;
+	$floatingBtnSize: 4.5rem;
+	body { font-size: 3.8vw; }
+	.logo {
+		width: 30vw;
+	}
+	.floating-btn.mob-floating-btn {
+		@include WH($floatingBtnSize,$floatingBtnSize);
+		.mob-btn-container {
+			bottom: $floatingBtnSize+1;
+		}
+	}
+	/////////// max-mob header:s ///////////
+	header .menu .menu-list {
+		&.down {
+			height: $mobMenuListH*4;
+		}
+		ul {
+			font-size: 1.5rem;
+			li {
+				height: $mobMenuListH;
+			}
+		}
+	}
+	/////////// max-mob header:e ///////////
+
+	/////////// max-mob section:e ///////////
+	.container > article {
+		&#fullPage {
+			.content {
+				flex-basis: $fullPageBasis;
+				> p {
+					font-size: 3.5vw;
+					line-height: 5.5vw;
+				}
+			}
+			.mob {
+				flex-basis: calc( 100% - $fullPageBasis );
+				margin-left: -19vw;
+			}
+		}
+		&#scrollPage section {
+			.content {
+				padding: 4rem $conP 6rem;
+				h2 {
+					margin: 0 0 5rem;
+				}
+			}
+			&.vision .content > ul > li {
+				margin: 0 0 4rem 0;
+				> div.txt {
+					line-height: 6vw;
+				}
+			}
+			&.service .content > ul > li {
+				margin-bottom: 5rem;
+			}
+			&.client .content .client-list > li {
+				width: calc((100% - $clientListRight) / 2);
+				margin: 0 0 3rem;
+			}
+			&.about > .content {
+				> div > h2 {
+					margin: 1rem 0 4rem;
+				}
+				.about-img > li {
+					background-size: 85%;
+				}
+			}
+		}
+	}
+	/////////// max-mob section:e ///////////
+
+	/////////// max-mob footer:s ///////////
+	footer {
+		> div > div {
+			p {
+				margin-bottom: .5rem;
+				&.gray {
+					margin: 1rem 0 0;
+				}
+			}
+			> div {
+				display: block;
+				> p:first-child:after {
+					display: none;
+				}
+			}
+		}
+		.mob {
+			margin-bottom: 1.5rem;
+			> ul > li {
+				width: 9vw;
+			}
+		}
+	}
+	/////////// max-mob footer:e ///////////
+
+}
